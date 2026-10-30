@@ -1,4 +1,5 @@
-import { Application, Assets, Sprite } from "pixi.js";
+import { Application, Assets, Sprite, Graphics } from "pixi.js";
+import { Starling } from "./starling";
 
 (async () => {
   // Create a new application
@@ -11,25 +12,12 @@ import { Application, Assets, Sprite } from "pixi.js";
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 
   // Load the bunny texture
-  const texture = await Assets.load("/assets/bunny.png");
+  const starlingGraphics = new Graphics().regularPoly(0, 0, 20, 3).fill(0xFF0000);
+  const starlingTexture = app.renderer.generateTexture(starlingGraphics);
 
-  // Create a bunny Sprite
-  const bunny = new Sprite(texture);
-
-  // Center the sprite's anchor point
-  bunny.anchor.set(0.5);
-
-  // Move the sprite to the center of the screen
-  bunny.position.set(app.screen.width / 2, app.screen.height / 2);
-
-  // Add the bunny to the stage
-  app.stage.addChild(bunny);
-
-  // Listen for animate update
-  app.ticker.add((time) => {
-    // Just for fun, let's rotate mr rabbit a little.
-    // * Delta is 1 if running at 100% performance *
-    // * Creates frame-independent transformation *
-    bunny.rotation += 0.1 * time.deltaTime;
-  });
+  for (let i = 0; i < 10; i++) {
+    const starling = new Starling(starlingTexture, app.screen.width / 2, app.screen.height / 2);
+    app.stage.addChild(starling.sprite);
+    app.ticker.add(() => starling.update());
+  }
 })();
