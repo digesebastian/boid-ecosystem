@@ -6,7 +6,6 @@ export class Starling {
     private velocity: Vector;
 
     constructor(texture: PIXI.Texture<PIXI.TextureSource<any>>, x: number, y: number) {
-        this.velocity = new Vector(x, y);
         this.sprite = new PIXI.Sprite(texture);
         this.sprite.anchor.set(0.5);
         this.sprite.x = x;
@@ -18,5 +17,6 @@ export class Starling {
     update() {
         this.sprite.x += this.velocity.x
         this.sprite.y += this.velocity.y
+        this.sprite.rotation = Math.atan2(this.velocity.y, this.velocity.x);
     }
 }
