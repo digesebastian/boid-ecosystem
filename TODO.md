@@ -1,11 +1,13 @@
 # Need to have
 
-### Starling:
+## Starling:
 - [] Create v1 starling shape
 - [] Make starlings fly around in groups
-- [] create starling on click
+- [x] create starling on click 
+### Sound
+- [] Find a sound for starlings
 
-### Other
+## Other
 
 - [] Create color palette
 
