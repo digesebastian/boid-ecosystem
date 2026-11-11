@@ -3,9 +3,9 @@ import {Vector, randomVector, zeroVector, vectorDistance, vectorSub} from './vec
 import { lerpAngle } from './helperFunctions';
 
 export class Starling {
-    private static readonly AVOID_DISTANCE = 100; // Minimum distance to maintain from other starlings
-    private static readonly AVOID_FORCE = 0.5; // Force applied to avoid other starlings
-    private static readonly AVOID_FORCE_MAX = 0.02; // Maximum force applied to avoid other starlings
+    private static readonly AVOID_DISTANCE = 50; // Minimum distance to maintain from other starlings
+    private static readonly AVOID_FORCE = 0.5; // force applied to avoid other starlings
+    private static readonly AVOID_FORCE_MAX = 0.01; // Maximum force applied to avoid other starlings
 
     private static readonly ALIGN_DISTANCE = 150; // Distance within which to align with other starlings
     private static readonly ALIGN_FORCE_MAX = 0.02; // Maximum force applied to align with other starlings
@@ -24,6 +24,7 @@ export class Starling {
         this.acceleration = zeroVector();
 
         this.sprite = new PIXI.Sprite(texture);
+        this.sprite.scale.set(0.5); // Scale down the sprite for better visibility
         this.sprite.anchor.set(0.5);
         this.sprite.x = x;
         this.sprite.y = y;
@@ -46,7 +47,7 @@ export class Starling {
             if (distance < Starling.AVOID_DISTANCE) {
                 const contribution = vectorSub(this.position, other.position);
                 contribution.normalize();
-                contribution.scale(Starling.AVOID_FORCE / distance); // Scale by distance to make the force stronger when closerce
+                contribution.scale(Starling.AVOID_FORCE / distance); // divide by distance to make the force stronger when closer
                 avoidForce.add(contribution);
             }
 
@@ -72,7 +73,7 @@ export class Starling {
 
         // Limit the speed
         this.velocity.limit(Starling.MAX_SPEED);
-        
+
         this.updatePosition();
     }
 
