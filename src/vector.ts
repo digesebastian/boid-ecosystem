@@ -61,3 +61,7 @@ export function randomVector(): Vector {
 
     return new Vector(x,y);
 }
+
+export function zeroVector(): Vector {
+    return new Vector(0, 0);
+}
