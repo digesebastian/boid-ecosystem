@@ -1,6 +1,6 @@
 export class Vector {
-    public x;
-    public y;
+    public x: number;
+    public y: number;
 
     constructor(x: number, y: number) {
         this.x = x;
@@ -33,6 +33,13 @@ export class Vector {
     scale(scalar: number): void {
         this.x *= scalar;
         this.y *= scalar;
+    }
+
+    limit(maxLength: number): void {
+        if (this.length > maxLength) {
+            this.normalize();
+            this.scale(maxLength);
+        }
     }
 }
 
