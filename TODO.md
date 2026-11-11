@@ -1,14 +1,15 @@
 # Need to have
 
 ## Starling:
-- [] Create v1 starling shape
+- [x] Create v1 starling shape
 - [] Make starlings fly around in groups
+- [] Create groups of specific size
 - [x] create starling on click 
 ### Sound
 - [] Find a sound for starlings
 
 ## Other
-
+- [] Create settings file
 - [] Create color palette
 
 # Nice to have
