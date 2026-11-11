@@ -66,7 +66,10 @@ export function randomVector(): Vector {
     const x = Math.cos(angle);
     const y = Math.sin(angle);
 
-    return new Vector(x,y);
+    const vector = new Vector(x, y);
+    vector.normalize();
+
+    return vector;
 }
 
 export function zeroVector(): Vector {
