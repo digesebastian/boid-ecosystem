@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js';
-import {Vector, randomVector, zeroVector, vectorDistance, vectorSub} from './vector';
+import { Vector, randomVector, zeroVector, vectorDistance, vectorSub } from './vector';
+import { DebugTheme } from './colorTheme';
 
 export class Starling {
     private static readonly AVOID_DISTANCE = 40; // Minimum distance to maintain from other starlings
@@ -18,12 +19,25 @@ export class Starling {
     public velocity: Vector;
     private acceleration: Vector;
 
+    private avoidForce: Vector = zeroVector();
+    private alignmentForce: Vector = zeroVector();
+    private borderAvoidForce: Vector = zeroVector();
+
     private screenWidth: number;
     private screenHeight: number;
 
-    constructor(texture: PIXI.Texture<PIXI.TextureSource<any>>, x: number, y: number, screenWidth: number, screenHeight: number) {
+    private debugGraphics: PIXI.Graphics; // Optional graphics object for debug drawing
+
+    constructor(
+        texture: PIXI.Texture<PIXI.TextureSource<any>>,
+        x: number,
+        y: number,
+        screenWidth: number,
+        screenHeight: number,
+        debugGraphics: PIXI.Graphics) {
         this.screenWidth = screenWidth;
         this.screenHeight = screenHeight;
+        this.debugGraphics = debugGraphics;
 
         this.position = new Vector(x, y);
         this.velocity = randomVector();
@@ -38,23 +52,24 @@ export class Starling {
     }
 
     steer(starlings: Starling[]) {
-        let avoidForce: Vector = zeroVector();
-        let alignmentForce: Vector = zeroVector();
-        
+        this.avoidForce = zeroVector();
+        this.alignmentForce = zeroVector();
+        this.borderAvoidForce = zeroVector();
+
         let alignmentGroupCount = 0;
         const alignmentGroupVelocity = zeroVector();
 
         for (const other of starlings) {
             if (other === this) continue;
-        
+
             const distance = vectorDistance(this.position, other.position);
-            
+
             // avoid other starlings getting too close
             if (distance < Starling.AVOID_DISTANCE) {
                 const contribution = vectorSub(this.position, other.position);
                 contribution.normalize();
                 contribution.scale(1 / distance); // divide by distance to make the force stronger when closer
-                avoidForce.add(contribution);
+                this.avoidForce.add(contribution);
             }
 
             // align with nearby starlings
@@ -68,18 +83,19 @@ export class Starling {
             alignmentGroupVelocity.scale(1 / alignmentGroupCount); // Average the velocities
             alignmentGroupVelocity.normalize();
             alignmentGroupVelocity.scale(Starling.MAX_SPEED); // Scale to max speed
-            alignmentForce = vectorSub(alignmentGroupVelocity, this.velocity);
+            this.alignmentForce = vectorSub(alignmentGroupVelocity, this.velocity);
         }
 
         const borderAvoidForce = this.computeBorderAvoidanceForce();
         borderAvoidForce.limit(Starling.BORDER_AVOID_FORCE); // Limit the border avoidance force
-        this.applyForce(borderAvoidForce);
+        this.borderAvoidForce = borderAvoidForce;
+        this.applyForce(this.borderAvoidForce);
 
-        avoidForce.limit(Starling.AVOID_FORCE); // Limit the avoidance force
-        this.applyForce(avoidForce);
+        this.avoidForce.limit(Starling.AVOID_FORCE); // Limit the avoidance force
+        this.applyForce(this.avoidForce);
 
-        alignmentForce.limit(Starling.ALIGN_FORCE); // Limit the alignment force
-        this.applyForce(alignmentForce);
+        this.alignmentForce.limit(Starling.ALIGN_FORCE); // Limit the alignment force
+        this.applyForce(this.alignmentForce);
 
         // Limit the speed
         this.velocity.limit(Starling.MAX_SPEED);
@@ -91,24 +107,41 @@ export class Starling {
         const avoidForce = zeroVector();
 
         if (this.position.x < Starling.BORDER_AVOID_DISTANCE) {
-            const contribution = new Vector(1, 0);
-
-            avoidForce.add(contribution);
-        } else if (this.position.x > this.screenWidth - Starling.BORDER_AVOID_DISTANCE) {
-            const contribution = new Vector(-1, 0);
-
-            avoidForce.add(contribution);
+            avoidForce.add(new Vector(1, 0));
+        }
+        if (this.position.x > this.screenWidth - Starling.BORDER_AVOID_DISTANCE) {
+            avoidForce.add(new Vector(-1, 0));
         }
         if (this.position.y < Starling.BORDER_AVOID_DISTANCE) {
-            const contribution = new Vector(0, 1);
-
-            avoidForce.add(contribution);
-        } else if (this.position.y > this.screenHeight - Starling.BORDER_AVOID_DISTANCE) {
-            const contribution = new Vector(0, -1);
-
-            avoidForce.add(contribution);
+            avoidForce.add(new Vector(0, 1));
+        }
+        if (this.position.y > this.screenHeight - Starling.BORDER_AVOID_DISTANCE) {
+            avoidForce.add(new Vector(0, -1));
         }
         return avoidForce;
+    }
+
+    public drawDebug() {
+        if (!this.debugGraphics) return;
+        this.debugGraphics.setStrokeStyle({width: 2, color: DebugTheme.velocityLine});
+        this.debugGraphics.moveTo(this.position.x, this.position.y);
+        this.debugGraphics.lineTo(this.position.x + this.velocity.x * 50, this.position.y + this.velocity.y * 50);
+        this.debugGraphics.stroke();
+
+        this.debugGraphics.setStrokeStyle({width: 2, color: DebugTheme.avoidLine});
+        this.debugGraphics.moveTo(this.position.x, this.position.y);
+        this.debugGraphics.lineTo(this.position.x + this.avoidForce.x * 2000, this.position.y + this.avoidForce.y * 2000);
+        this.debugGraphics.stroke();
+
+        this.debugGraphics.setStrokeStyle({width: 2, color: DebugTheme.alignmentLine});
+        this.debugGraphics.moveTo(this.position.x, this.position.y);
+        this.debugGraphics.lineTo(this.position.x + this.alignmentForce.x * 2000, this.position.y + this.alignmentForce.y * 2000);
+        this.debugGraphics.stroke();
+
+        this.debugGraphics.setStrokeStyle({width: 2, color: DebugTheme.borderAvoidLine});
+        this.debugGraphics.moveTo(this.position.x, this.position.y);
+        this.debugGraphics.lineTo(this.position.x + this.borderAvoidForce.x * 2000, this.position.y + this.borderAvoidForce.y * 2000);
+        this.debugGraphics.stroke();
     }
 
     private applyForce(force: Vector) {
