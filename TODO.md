@@ -1,15 +1,19 @@
 # Need to have
 
 ## Starling:
-- [] Create v1 starling shape
-- [] Make starlings fly around in groups
+- [x] Create v1 starling shape
+- [x] Make starlings fly around in groups
 - [x] create starling on click 
+- [x] make starlings avoid walls
+- [] Create groups of specific size
+
 ### Sound
 - [] Find a sound for starlings
 
 ## Other
-
-- [] Create color palette
+- [] Create settings file
+- [] Add debug mode
+- [x] Create color palette
 
 # Nice to have
 - [] Allow to select different color palettes

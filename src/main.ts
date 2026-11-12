@@ -2,6 +2,7 @@ import { Application } from "pixi.js";
 import { Starling } from "./starling";
 import { createStarlingTexture } from "./textureFactory";
 import { Theme } from "./colorTheme";
+import {Vector, randomVector, vectorDistance} from './vector';
 
 (async () => {
   // Create a new application
@@ -22,10 +23,13 @@ import { Theme } from "./colorTheme";
 
   // Create starling texture
   const starlingTexture = createStarlingTexture(app.renderer);
+  const starlings: Starling[] = [];
 
   app.stage.on('pointertap', (event) => {
-      const starling = new Starling(starlingTexture, event.x, event.y);
+      const starling = new Starling(starlingTexture, event.x, event.y, app.screen.width, app.screen.height);
+      console.log(`Created starling at (${event.x}, ${event.y}) with velocity (${starling.velocity.x.toFixed(2)}, ${starling.velocity.y.toFixed(2)})`);
+      starlings.push(starling);
       app.stage.addChild(starling.sprite);
-      app.ticker.add(() => starling.update());
+      app.ticker.add(() => starling.steer(starlings));
     });
 })();
