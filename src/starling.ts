@@ -3,14 +3,14 @@ import { Vector, randomVector, zeroVector, vectorDistance, vectorSub } from './v
 import { DebugTheme } from './colorTheme';
 
 export class Starling {
-    private static readonly AVOID_DISTANCE = 40; // Minimum distance to maintain from other starlings
-    private static readonly AVOID_FORCE = 0.005; // Maximum force applied to avoid other starlings
+    private static readonly AVOID_DISTANCE = 30; // Minimum distance to maintain from other starlings
+    private static readonly AVOID_FORCE = 0.03; // Maximum force applied to avoid other starlings
 
     private static readonly ALIGN_DISTANCE = 100; // Distance within which to align with other starlings
     private static readonly ALIGN_FORCE = 0.01; // Maximum force applied to align with other starlings
 
     private static readonly BORDER_AVOID_DISTANCE = 10; // Distance from the border to start avoiding
-    private static readonly BORDER_AVOID_FORCE = 0.015; // Force applied to avoid the border
+    private static readonly BORDER_AVOID_FORCE = 0.02; // Force applied to avoid the border
 
     private static readonly MAX_SPEED = 1; // Maximum speed of the starling
 
@@ -86,9 +86,8 @@ export class Starling {
             this.alignmentForce = vectorSub(alignmentGroupVelocity, this.velocity);
         }
 
-        const borderAvoidForce = this.computeBorderAvoidanceForce();
-        borderAvoidForce.limit(Starling.BORDER_AVOID_FORCE); // Limit the border avoidance force
-        this.borderAvoidForce = borderAvoidForce;
+        this.borderAvoidForce = this.computeBorderAvoidanceForce();
+        this.borderAvoidForce.limit(Starling.BORDER_AVOID_FORCE); // Limit the border avoidance force
         this.applyForce(this.borderAvoidForce);
 
         this.avoidForce.limit(Starling.AVOID_FORCE); // Limit the avoidance force
@@ -96,9 +95,6 @@ export class Starling {
 
         this.alignmentForce.limit(Starling.ALIGN_FORCE); // Limit the alignment force
         this.applyForce(this.alignmentForce);
-
-        // Limit the speed
-        this.velocity.limit(Starling.MAX_SPEED);
 
         this.updatePosition();
     }
@@ -130,17 +126,19 @@ export class Starling {
 
         this.debugGraphics.setStrokeStyle({width: 2, color: DebugTheme.avoidLine});
         this.debugGraphics.moveTo(this.position.x, this.position.y);
-        this.debugGraphics.lineTo(this.position.x + this.avoidForce.x * 2000, this.position.y + this.avoidForce.y * 2000);
+        this.debugGraphics.lineTo(this.position.x + this.avoidForce.x * 4000, this.position.y + this.avoidForce.y * 4000);
+        this.debugGraphics.stroke();
+        this.debugGraphics.circle(this.position.x, this.position.y, Starling.AVOID_DISTANCE);
         this.debugGraphics.stroke();
 
         this.debugGraphics.setStrokeStyle({width: 2, color: DebugTheme.alignmentLine});
         this.debugGraphics.moveTo(this.position.x, this.position.y);
-        this.debugGraphics.lineTo(this.position.x + this.alignmentForce.x * 2000, this.position.y + this.alignmentForce.y * 2000);
+        this.debugGraphics.lineTo(this.position.x + this.alignmentForce.x * 4000, this.position.y + this.alignmentForce.y * 4000);
         this.debugGraphics.stroke();
 
         this.debugGraphics.setStrokeStyle({width: 2, color: DebugTheme.borderAvoidLine});
         this.debugGraphics.moveTo(this.position.x, this.position.y);
-        this.debugGraphics.lineTo(this.position.x + this.borderAvoidForce.x * 2000, this.position.y + this.borderAvoidForce.y * 2000);
+        this.debugGraphics.lineTo(this.position.x + this.borderAvoidForce.x * 4000, this.position.y + this.borderAvoidForce.y * 4000);
         this.debugGraphics.stroke();
     }
 
@@ -150,6 +148,7 @@ export class Starling {
 
     private updatePosition() {
         this.velocity.add(this.acceleration);
+        this.velocity.limit(Starling.MAX_SPEED); // Limit the speed to the maximum speed
         this.position.add(this.velocity);
 
         this.sprite.x = this.position.x;
