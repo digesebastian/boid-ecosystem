@@ -31,7 +31,7 @@ import { Theme } from "./colorTheme";
   window.addEventListener('keydown', (event) => {
     if (event.key === 'd') {
       debugMode = !debugMode;
-      app.canvas.style.border = debugMode ? '3px solid red' : 'none'; // Add or remove border based on debug mode
+      app.canvas.style.border = debugMode ? '3px solid red' : '3px solid transparent'; // Add or remove border based on debug mode
     }
   });
 
