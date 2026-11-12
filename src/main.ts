@@ -26,7 +26,8 @@ import {Vector, randomVector, vectorDistance} from './vector';
   const starlings: Starling[] = [];
 
   app.stage.on('pointertap', (event) => {
-      const starling = new Starling(starlingTexture, event.x, event.y);
+      const starling = new Starling(starlingTexture, event.x, event.y, app.screen.width, app.screen.height);
+      console.log(`Created starling at (${event.x}, ${event.y}) with velocity (${starling.velocity.x.toFixed(2)}, ${starling.velocity.y.toFixed(2)})`);
       starlings.push(starling);
       app.stage.addChild(starling.sprite);
       app.ticker.add(() => starling.steer(starlings));

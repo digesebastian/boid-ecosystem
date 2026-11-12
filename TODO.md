@@ -4,7 +4,7 @@
 - [x] Create v1 starling shape
 - [x] Make starlings fly around in groups
 - [x] create starling on click 
-- [] make starlings avoid walls
+- [x] make starlings avoid walls
 - [] Create groups of specific size
 
 ### Sound
