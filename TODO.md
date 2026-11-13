@@ -9,8 +9,19 @@
 - [] Create groups of specific size
 - [] Gradually adjust velocity back to max if it is less than max
 - [] Speed up starlings
+- [] Eat insects
 
-### Sound
+## Insect
+
+- [x] Spawn insects as single black dots at random on the screen
+- [] Find design for insects
+- [] Move insects slightly once in a while
+- [] Create more insects near existing insects
+- [] Kill insect after some time
+- [] Make insects blink
+- [] Make groups of insects blink in unison
+
+## Sound
 - [] Find a sound for starlings
 
 ## Other

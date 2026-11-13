@@ -1,7 +1,9 @@
 import { Application, Graphics } from "pixi.js";
 import { Starling } from "./starling";
-import { createStarlingTexture } from "./textureFactory";
+import { Insect } from "./Insect"
+import { createStarlingTexture, createInsectTexture } from "./textureFactory";
 import { Theme } from "./colorTheme";
+import { Settings } from "./settings";
 
 (async () => {
   // Create a new application
@@ -24,6 +26,8 @@ import { Theme } from "./colorTheme";
   const starlingTexture = createStarlingTexture(app.renderer);
   const starlings: Starling[] = [];
 
+  const insectTexture = createInsectTexture(app.renderer);
+
   const debugGraphics = new Graphics();
   app.stage.addChild(debugGraphics);
 
@@ -42,6 +46,8 @@ import { Theme } from "./colorTheme";
       app.stage.addChild(starling.sprite);
     });
 
+  
+  let insectTicker = 0;
   app.ticker.add(() => {
     debugGraphics.clear();
     for (const starling of starlings) {
@@ -50,5 +56,14 @@ import { Theme } from "./colorTheme";
         starling.drawDebug();
       }
     }
+
+    insectTicker++;
+    if (insectTicker >= Settings.INSECT_TICK_RATE) {
+      insectTicker = 0;
+      const insect = new Insect(insectTexture, Math.random() * app.screen.width, Math.random() * app.screen.height);
+      app.stage.addChild(insect.sprite);
+      console.log(`Created insect at (${insect.position.x.toFixed(2)}, ${insect.position.y.toFixed(2)})`);
+    }
+
     });
 })();

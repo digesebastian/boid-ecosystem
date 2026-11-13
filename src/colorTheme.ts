@@ -1,15 +1,16 @@
 export const Theme = {
-    background: 0xa3d96d,
-    starling1: 0x424B5A,
-    starling2: 0x273146,
-    starling3: 0x221E21,
-    insect1: 0xFC9E4F,
-    insect2: 0xF4442E,
+    background: '#a3d96d',
+    starling1: '#424B5A',
+    starling2: '#273146',
+    starling3: '#221E21',
+    insect1: '#FC9E4F',
+    insect2: '#F4442E',
+    insect3: '#000000'
 } as const;
 
 export const DebugTheme = {
-    velocityLine: 0x00ff00,
-    avoidLine: 0xff0000,
-    alignmentLine: 0x0000ff,
-    borderAvoidLine: 0xffff00,
+    velocityLine: '#00ff00',
+    avoidLine: '#ff0000',
+    alignmentLine: '#0000ff',
+    borderAvoidLine: '#ffff00',
 }

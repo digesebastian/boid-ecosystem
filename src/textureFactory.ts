@@ -34,3 +34,15 @@ const starlingGradient = new FillGradient({
     // Use normalized coordinate system where (0,0) is the top-left and (1,1) is the bottom-right of the shape
     textureSpace: 'local'
 });
+
+export function createInsectTexture(renderer: Renderer): Texture<TextureSource<any>> {
+    const insectGraphics = new Graphics()
+    .rect(0,0,1,1)
+    .stroke({
+        width: 1,
+        color: Theme.insect3
+    });
+    
+    const insectTexture = renderer.generateTexture(insectGraphics);
+    return insectTexture; 
+}
