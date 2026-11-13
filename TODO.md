@@ -17,7 +17,7 @@
 - [x] Find design for insects
 - [] Move insects slightly once in a while
 - [] Create more insects near existing insects
-- [] Kill insect after some time
+- [x] Kill insect after some time
 - [] Make insects blink
 - [] Make groups of insects blink in unison
 

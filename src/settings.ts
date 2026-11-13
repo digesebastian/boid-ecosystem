@@ -1,3 +1,5 @@
 export const Settings = {
-    INSECT_TICK_RATE: 200
+    INSECT_TICK_RATE: 150,
+    INSECT_LIFETIME_MIN: 1000,
+    INSECT_LIFETIME_MAX: 3000
 };

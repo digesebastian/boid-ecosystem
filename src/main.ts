@@ -1,6 +1,6 @@
 import { Application, Graphics } from "pixi.js";
 import { Starling } from "./starling";
-import { Insect } from "./Insect"
+import { Insect } from "./insect"
 import { createStarlingTexture, createInsectTexture } from "./textureFactory";
 import { Theme } from "./colorTheme";
 import { Settings } from "./settings";
@@ -27,6 +27,7 @@ import { Settings } from "./settings";
   const starlings: Starling[] = [];
 
   const insectTexture = createInsectTexture(app.renderer);
+  const insects: Insect[] = [];
 
   const debugGraphics = new Graphics();
   app.stage.addChild(debugGraphics);
@@ -61,7 +62,12 @@ import { Settings } from "./settings";
     if (insectTicker >= Settings.INSECT_TICK_RATE) {
       insectTicker = 0;
       const insect = new Insect(insectTexture, Math.random() * app.screen.width, Math.random() * app.screen.height);
+      insects.push(insect);
       app.stage.addChild(insect.sprite);
+    }    
+
+    for (let i = 0; i < insects.length; i++) {
+      insects[i].update(insects, i);
     }
 
     });
