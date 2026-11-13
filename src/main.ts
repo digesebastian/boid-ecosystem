@@ -1,8 +1,7 @@
-import { Application } from "pixi.js";
+import { Application, Graphics } from "pixi.js";
 import { Starling } from "./starling";
 import { createStarlingTexture } from "./textureFactory";
 import { Theme } from "./colorTheme";
-import {Vector, randomVector, vectorDistance} from './vector';
 
 (async () => {
   // Create a new application
@@ -25,11 +24,31 @@ import {Vector, randomVector, vectorDistance} from './vector';
   const starlingTexture = createStarlingTexture(app.renderer);
   const starlings: Starling[] = [];
 
+  const debugGraphics = new Graphics();
+  app.stage.addChild(debugGraphics);
+
+  let debugMode = false; // Set to true to enable debug mode
+  window.addEventListener('keydown', (event) => {
+    if (event.key === 'd') {
+      debugMode = !debugMode;
+      app.canvas.style.border = debugMode ? '3px solid red' : '3px solid transparent'; // Add or remove border based on debug mode
+    }
+  });
+
   app.stage.on('pointertap', (event) => {
-      const starling = new Starling(starlingTexture, event.x, event.y, app.screen.width, app.screen.height);
+      const starling = new Starling(starlingTexture, event.x, event.y, app.screen.width, app.screen.height, debugGraphics);
       console.log(`Created starling at (${event.x}, ${event.y}) with velocity (${starling.velocity.x.toFixed(2)}, ${starling.velocity.y.toFixed(2)})`);
       starlings.push(starling);
       app.stage.addChild(starling.sprite);
-      app.ticker.add(() => starling.steer(starlings));
+    });
+
+  app.ticker.add(() => {
+    debugGraphics.clear();
+    for (const starling of starlings) {
+      starling.steer(starlings);
+      if (debugMode) {
+        starling.drawDebug();
+      }
+    }
     });
 })();
