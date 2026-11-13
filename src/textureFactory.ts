@@ -37,10 +37,10 @@ const starlingGradient = new FillGradient({
 
 export function createInsectTexture(renderer: Renderer): Texture<TextureSource<any>> {
     const insectGraphics = new Graphics()
-    .rect(0,0,1,1)
+    .circle(0,0,1)
     .stroke({
         width: 1,
-        color: Theme.insect3
+        color: '#ffffff'
     });
     
     const insectTexture = renderer.generateTexture(insectGraphics);

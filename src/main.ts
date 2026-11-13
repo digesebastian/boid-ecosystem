@@ -62,7 +62,6 @@ import { Settings } from "./settings";
       insectTicker = 0;
       const insect = new Insect(insectTexture, Math.random() * app.screen.width, Math.random() * app.screen.height);
       app.stage.addChild(insect.sprite);
-      console.log(`Created insect at (${insect.position.x.toFixed(2)}, ${insect.position.y.toFixed(2)})`);
     }
 
     });

@@ -1,3 +1,3 @@
 export const Settings = {
-    INSECT_TICK_RATE: 300
+    INSECT_TICK_RATE: 200
 };

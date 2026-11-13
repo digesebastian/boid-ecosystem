@@ -3,9 +3,9 @@ export const Theme = {
     starling1: '#424B5A',
     starling2: '#273146',
     starling3: '#221E21',
-    insect1: '#FC9E4F',
-    insect2: '#F4442E',
-    insect3: '#000000'
+    insect1: '#E09F3E',
+    insect2: '#CE4257',
+    insect3: '#92140C'
 } as const;
 
 export const DebugTheme = {

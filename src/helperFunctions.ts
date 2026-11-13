@@ -9,3 +9,8 @@ export const lerpAngle = (start: number, end: number, amt: number) => {
     
     return start + delta * amt;
 };
+
+export function randomEntry<Type>(array: Array<Type>): Type {
+    const noOfElements = array.length;
+    return array[Math.floor(Math.random() * noOfElements)]
+}

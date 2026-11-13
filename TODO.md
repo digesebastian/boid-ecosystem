@@ -14,7 +14,7 @@
 ## Insect
 
 - [x] Spawn insects as single black dots at random on the screen
-- [] Find design for insects
+- [x] Find design for insects
 - [] Move insects slightly once in a while
 - [] Create more insects near existing insects
 - [] Kill insect after some time
